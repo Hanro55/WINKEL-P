@@ -1,25 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Webstore</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1 id="store-name">My Webstore</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="admin.html">Admin</a>
-        </nav>
-    </header>
-    <section id="products">
-        <!-- Products will be added here -->
-    </section>
-    <footer>
-        <p>© 2025 My Webstore. All rights reserved.</p>
-    </footer>
-    <script src="script.js"></script>
-</body>
-</html>
+import { useState } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { TrendingUp, TrendingDown, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+export default function BoomCrashStrategy() {
+  const [example, setExample] = useState('boom');
+
+  const boomData = [
+    { time: '0', price: 10000 },
+    { time: '1', price: 9980 },
+    { time: '2', price: 9960 },
+    { time: '3', price: 10120 },
+    { time: '4', price: 10090 },
+  ];
+
+  const crashData = [
+    { time: '0', price: 10000 },
+    { time: '1', price: 10040 },
+    { time: '2', price: 10070 },
+    { time: '3', price: 9860 },
+    { time: '4', price: 9890 },
+  ];
+
+  return (
+    <div className="p-8 bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen text-white">
+      <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-bold mb-6 text-center">
+        🎯 Boom & Crash 1000 Strategy Guide
+      </motion.h1>
+
+      <Card className="max-w-3xl mx-auto mb-6 bg-gray-800/60 backdrop-blur border-gray-700">
+        <CardContent className="p-6 space-y-4">
+          <p className="text-gray-300 text-lg">
+            Learn when to <span className="text-green-400 font-semibold">Buy Boom</span> or <span className="text-red-400 font-semibold">Sell Crash</span> using Moving Averages, RSI, and Stochastic indicators.
+          </p>
+          <div className="flex justify-center gap-4 mt-4">
+            <Button onClick={() => setExample('boom')} variant={example === 'boom' ? 'default' : 'outline'}>
+              <TrendingUp className="mr-2" /> Boom 1000 Example
+            </Button>
+            <Button onClick={() => setExample('crash')} variant={example === 'crash' ? 'default' : 'outline'}>
+              <TrendingDown className="mr-2" /> Crash 1000 Example
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+        <Card className="max-w-4xl mx-auto bg-gray-800/60 border-gray-700">
+          <CardContent className="p-6">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={example === 'boom' ? boomData : crashData}>
+                <XAxis dataKey="time" stroke="#aaa" />
+                <YAxis stroke="#aaa" />
+                <Tooltip contentStyle={{ background: '#111', border: '1px solid #555' }} />
+                <Line type="monotone" dataKey="price" stroke={example === 'boom' ? '#4ade80' : '#f87171'} strokeWidth={3} dot={true} />
+              </LineChart>
+            </ResponsiveContainer>
+
+            <div className="mt-4 space-y-3">
+              {example === 'boom' ? (
+                <>
+                  <h2 className="text-xl font-semibold text-green-400">📈 Boom 1000 - Buy Setup</h2>
+                  <ul className="list-disc ml-6 text-gray-300">
+                    <li>Price below 200 EMA, RSI < 30, Stochastic < 20</li>
+                    <li>Look for bullish reversal candles near support</li>
+                    <li>Target 10–20 points above entry or after spike</li>
+                    <li>Set Stop Loss 10–15 points below entry</li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-xl font-semibold text-red-400">📉 Crash 1000 - Sell Setup</h2>
+                  <ul className="list-disc ml-6 text-gray-300">
+                    <li>Price above 200 EMA, RSI > 70, Stochastic > 80</li>
+                    <li>Look for bearish reversal candles near resistance</li>
+                    <li>Target 10–20 points below entry or after drop</li>
+                    <li>Set Stop Loss 10–15 points above entry</li>
+                  </ul>
+                </>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="max-w-3xl mx-auto mt-8 text-gray-400 text-center">
+        <AlertCircle className="mx-auto mb-2 text-yellow-400" />
+        <p>⚠️ Always trade with risk management. Start on a demo account and never risk more than 2–3% per trade.</p>
+      </motion.div>
+    </div>
+  );
+}
+                  
