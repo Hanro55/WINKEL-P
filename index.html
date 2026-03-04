@@ -1,107 +1,447 @@
-import { useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, AlertCircle, Activity } from 'lucide-react';
-import { motion } from 'framer-motion';
-
-export default function BoomCrashStrategy() {
-  const [example, setExample] = useState('boom');
-
-  const boomData = [
-    { time: '0', price: 10000, ema200: 10020, ema50: 10010 },
-    { time: '1', price: 9980, ema200: 10015, ema50: 9990 },
-    { time: '2', price: 9960, ema200: 10010, ema50: 9975 },
-    { time: '3', price: 10120, ema200: 10005, ema50: 10030 },
-    { time: '4', price: 10090, ema200: 10010, ema50: 10060 },
-  ];
-
-  const crashData = [
-    { time: '0', price: 10000, ema200: 9980, ema50: 9990 },
-    { time: '1', price: 10040, ema200: 9990, ema50: 10010 },
-    { time: '2', price: 10070, ema200: 10000, ema50: 10025 },
-    { time: '3', price: 9860, ema200: 9995, ema50: 9970 },
-    { time: '4', price: 9890, ema200: 9990, ema50: 9980 },
-  ];
-
-  const colors = {
-    boom: {
-      gradient: 'from-green-900 via-emerald-900 to-gray-900',
-      line: '#4ade80',
-      button: 'bg-green-500 hover:bg-green-600',
-    },
-    crash: {
-      gradient: 'from-red-900 via-rose-900 to-gray-900',
-      line: '#f87171',
-      button: 'bg-red-500 hover:bg-red-600',
-    }
-  };
-
-  const current = example === 'boom' ? boomData : crashData;
-
-  return (
-    <div className={`p-8 bg-gradient-to-br ${colors[example].gradient} min-h-screen text-white transition-all duration-700`}> 
-      <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-extrabold mb-6 text-center drop-shadow-md">
-        {example === 'boom' ? '📈 Boom 1000 Strategy Guide' : '📉 Crash 1000 Strategy Guide'}
-      </motion.h1>
-
-      <div className="flex justify-center gap-6 mb-6">
-        <Button onClick={() => setExample('boom')} className={`${colors.boom.button} text-white font-semibold px-6 py-2 rounded-xl shadow-lg ${example==='boom'?'ring-4 ring-green-400':''}`}>
-          <TrendingUp className="mr-2" /> Boom 1000
-        </Button>
-        <Button onClick={() => setExample('crash')} className={`${colors.crash.button} text-white font-semibold px-6 py-2 rounded-xl shadow-lg ${example==='crash'?'ring-4 ring-red-400':''}`}>
-          <TrendingDown className="mr-2" /> Crash 1000
-        </Button>
-      </div>
-
-      <Card className="max-w-4xl mx-auto bg-gray-900/70 border-gray-700 shadow-xl">
-        <CardContent className="p-6">
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={current}>
-              <XAxis dataKey="time" stroke="#bbb" />
-              <YAxis stroke="#bbb" />
-              <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #555' }} />
-              <Legend />
-              <Line type="monotone" dataKey="price" stroke={colors[example].line} strokeWidth={3} dot={{ fill: '#fff' }} name="Price" />
-              <Line type="monotone" dataKey="ema200" stroke="#38bdf8" strokeDasharray="5 5" name="EMA 200" />
-              <Line type="monotone" dataKey="ema50" stroke="#a78bfa" strokeDasharray="4 4" name="EMA 50" />
-            </LineChart>
-          </ResponsiveContainer>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
-            {example === 'boom' ? (
-              <>
-                <h2 className="text-2xl font-bold text-green-400 flex items-center gap-2"><Activity className="text-green-400"/> Buy Setup</h2>
-                <ul className="list-disc ml-6 text-gray-300 mt-2 space-y-2">
-                  <li>💡 Price below <span className="text-sky-400">200 EMA</span> and starting to rise</li>
-                  <li>📉 RSI below <span className="text-yellow-400">30</span> → oversold zone</li>
-                  <li>📊 Stochastic <span className="text-yellow-400">below 20</span> confirms momentum reversal</li>
-                  <li>💚 Look for bullish candle patterns (hammer / engulfing)</li>
-                  <li>🎯 Target 10–20 points profit or after a clear spike</li>
-                  <li>🛑 Stop Loss 10–15 points below entry</li>
-                </ul>
-              </>
-            ) : (
-              <>
-                <h2 className="text-2xl font-bold text-red-400 flex items-center gap-2"><Activity className="text-red-400"/> Sell Setup</h2>
-                <ul className="list-disc ml-6 text-gray-300 mt-2 space-y-2">
-                  <li>💡 Price above <span className="text-sky-400">200 EMA</span> and turning downward</li>
-                  <li>📈 RSI above <span className="text-yellow-400">70</span> → overbought zone</li>
-                  <li>📊 Stochastic <span className="text-yellow-400">above 80</span> confirms overbought momentum</li>
-                  <li>❤️ Look for bearish candle patterns (shooting star / engulfing)</li>
-                  <li>🎯 Target 10–20 points profit or after a clear crash spike</li>
-                  <li>🛑 Stop Loss 10–15 points above entry</li>
-                </ul>
-              </>
-            )}
-          </motion.div>
-        </CardContent>
-      </Card>
-
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="max-w-3xl mx-auto mt-8 text-gray-300 text-center bg-gray-900/60 rounded-2xl p-4 border border-gray-700">
-        <AlertCircle className="mx-auto mb-2 text-yellow-400" />
-        <p className="text-sm italic">⚠️ Always manage your risk. Practice on a demo first. Never risk more than <span className="text-yellow-300 font-semibold">2–3%</span> of your account per trade.</p>
-      </motion.div>
-    </div>
-  );
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zweers Troue Gallery Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body::before{
+    content:"";
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:url('Wedding.jpg') no-repeat center center;
+    background-size:cover; opacity:0.3; z-index:-1;
 }
+body{margin:0; font-family:'Poppins', sans-serif; background:#000; color:#fff;}
+.container{max-width:1000px;margin:0 auto;padding:20px;}
+h1{text-align:center;font-size:32px;color:#fff;}
+p{text-align:center;font-size:18px;color:#ccc;}
+button{border:none;border-radius:30px;font-size:16px;cursor:pointer;margin:5px;transition:0.3s;}
+.upload-btn{background:#ff4da6;color:white;padding:12px 25px;}
+.upload-btn:hover{background:#e60084;}
+.download-btn{background:#4da6ff;color:white;padding:12px 20px;}
+.select-all-btn{background:#00ff99;color:black;padding:12px 20px;}
+.select-all-btn:hover{background:#00cc7a;}
+.deselect-all-btn{background:#ffcc00;color:black;padding:12px 20px;}
+.deselect-all-btn:hover{background:#e6b800;}
+.delete-btn{background:#ff3333;color:white;font-size:14px;padding:5px 10px;}
+
+/* Drop area */
+#drop-area{border:2px dashed #fff;padding:20px;border-radius:20px;margin:20px 0;text-align:center;transition:0.3s;}
+#drop-area.hover{background:rgba(255,255,255,0.1);}
+.controls{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;padding:10px;margin-top:20px;}
+.gallery-item{position:relative;display:inline-block;transition:0.3s;background:rgba(255,255,255,0.05);border-radius:10px;overflow:hidden;}
+.gallery-item img{width:100%;border-radius:10px;cursor:pointer;opacity:0;animation:fadeIn 0.5s forwards;}
+@keyframes fadeIn{to{opacity:1;}}
+.checkbox-container{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:5px;}
+.gallery-info{font-size:12px;padding:5px 6px;text-align:left;color:#fff; line-height:1.3;}
+.gallery-info span.name{font-weight:600;}
+.gallery-info span.message{font-style:italic;}
+
+/* Carousel */
+.carousel{position:relative;width:100%;max-height:300px;margin-bottom:20px;overflow:hidden;border-radius:10px;}
+.carousel img{width:100%;height:300px;object-fit:cover;}
+.carousel-caption{position:absolute;bottom:10px;left:10px;color:#fff;font-size:20px;background:rgba(0,0,0,0.5);padding:5px 10px;border-radius:5px;}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;font-size:24px;padding:10px;border-radius:50%;cursor:pointer;}
+.carousel-btn.left{left:10px;} 
+.carousel-btn.right{right:10px;}
+
+/* Sidebar */
+.sidebar{position:fixed;left:0;top:0;height:100%;width:220px;background:rgba(0,0,0,0.9);color:#fff;overflow-x:hidden;transition:width 0.3s;padding-top:60px;z-index:1000;}
+.sidebar.collapsed{width:0;padding:0;}
+.sidebar a{display:block;padding:10px 20px;text-decoration:none;color:white;}
+.sidebar a:hover{background:#111;}
+#sidebarToggle{position:fixed;left:10px;top:15px;background:#ff4da6;border-radius:50%;width:40px;height:40px;border:none;cursor:pointer;color:#fff;font-size:24px;z-index:1100;}
+#sidebarToggle:hover{background:#e60084;}
+
+/* Search bar */
+#searchBar{width:100%;max-width:300px;padding:5px;margin:10px auto;border-radius:15px;border:none;display:block;font-size:16px;}
+
+/* Stats */
+.stats{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin:15px auto;font-size:14px;color:#fff;}
+.stat-card{background:rgba(255,255,255,0.1); padding:10px 15px; border-radius:12px; text-align:center; min-width:120px;}
+
+/* Inputs */
+#uploaderName,#categorySelect,#memoryMsg{background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 12px; border-radius:15px; font-size:16px; margin:5px; width:calc(100%-20px);}
+#uploaderName::placeholder,#memoryMsg::placeholder{color:rgba(255,255,255,0.6);}
+
+/* Lightbox */
+#lightboxOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:2000;}
+#lightboxOverlay img{max-width:90%;max-height:90%;border-radius:10px;}
+#lightboxOverlay span{position:absolute;top:20px;right:30px;font-size:30px;color:white;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar collapsed" id="sidebar">
+    <a href="#" data-category="all">Alle Fotos</a>
+    <a href="#" data-category="family">Familie</a>
+    <a href="#" data-category="bride">Bride</a>
+    <a href="#" data-category="groom">Groom</a>
+    <a href="#" data-category="friends">Friends</a>
+    <a href="#" data-category="other">Other</a>
+    <a href="#" data-category="my">My Fotos</a>
+    <a href="#" id="adminBtn">🔐 Admin</a>
+</div>
+<button id="sidebarToggle">☰</button>
+
+<!-- Hero Carousel -->
+<div class="carousel" id="heroCarousel">
+    <div class="carousel-caption">Zweers Troue 2026 ❤️</div>
+</div>
+
+<div class="container">
+    <h1>📸 Zweers Troue Gallery</h1>
+    <p>Upload jou photos vanaf jou foon of rekenaar! ❤️</p>
+
+    <input id="searchBar" placeholder="🔍 Soek naam...">
+
+    <!-- Drop area -->
+    <div id="drop-area">
+        <input type="file" id="fileInput" hidden>
+        <input type="text" id="uploaderName" placeholder="Jou naam (Optioneel)">
+        <select id="categorySelect">
+            <option value="family">Family</option>
+            <option value="bride">Bride</option>
+            <option value="groom">Groom</option>
+            <option value="friends">Friends</option>
+            <option value="other">Other</option>
+        </select>
+        <input type="text" id="memoryMsg" placeholder="Stuur ñ boodskap vir die bruidspaar saam jou foto's">
+        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Upload Photo</button>
+        <p>Of sleep jou foto hierheen</p>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:5px;">
+        <button id="searchBtn">Soek</button>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls" id="adminControls" style="display:none;">
+        <button class="select-all-btn" id="selectAllBtn">Select All</button>
+        <button class="deselect-all-btn" id="deselectAllBtn">Deselect All</button>
+        <button class="download-btn" id="downloadSelectedBtn">Download Selected</button>
+    </div>
+
+    <div class="confetti-message" id="confettiMessage"></div>
+    <div class="stats" id="stats"></div>
+    <div class="gallery" id="gallery"></div>
+</div>
+
+<section style="margin-top:50px;">
+    <h2 style="text-align:center;color:#ff4da6;">💌 Los 'n boodskap vir die bruidspaar</h2>
+
+    <div style="text-align:center;">
+        <input type="text" id="msgName" placeholder="Jou Naam">
+        <br><br>
+        <textarea id="msgText" placeholder="Jou boodskap..." style="width:100%;max-width:400px;height:80px;border-radius:15px;padding:10px;"></textarea>
+        <br><br>
+        <button class="upload-btn" id="sendMsgBtn">Stuur Boodskap</button>
+    </div>
+
+    <div id="messagesList" style="margin-top:30px;"></div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightboxOverlay">
+    <span id="closeLightbox">&times;</span>
+    <img id="lightboxImg">
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, listAll, getDownloadURL, deleteObject, getMetadata, updateMetadata } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-storage.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB_AVP6tZD8U4AHNLrVf9nCe-gpOHPDLM8",
+    authDomain: "zweers-troue.firebaseapp.com",
+    projectId: "zweers-troue",
+    storageBucket: "zweers-troue.firebasestorage.app",
+    messagingSenderId: "584236352490",
+    appId: "1:584236352490:web:c717038090bd005e712893",
+    measurementId: "G-JBWM0TNSM4"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+const db = getFirestore(app);
+
+const adminPassword = "troueAdmin123";
+let isAdmin = false;
+
+const input = document.getElementById("fileInput");
+const dropArea = document.getElementById("drop-area");
+const uploaderNameInput = document.getElementById("uploaderName");
+const categorySelect = document.getElementById("categorySelect");
+const memoryMsgInput = document.getElementById("memoryMsg");
+const gallery = document.getElementById("gallery");
+const heroCarousel = document.getElementById("heroCarousel");
+const searchBar = document.getElementById("searchBar");
+const statsDiv = document.getElementById("stats");
+
+const sidebar = document.getElementById("sidebar");
+const toggleBtn = document.getElementById("sidebarToggle");
+toggleBtn.addEventListener("click", ()=> sidebar.classList.toggle("collapsed"));
+
+document.getElementById("adminBtn").addEventListener("click", ()=>{
+    if(isAdmin){
+        alert("Jy is reeds as Admin ingeteken.");
+        return;
+    }
+    const pass = prompt("Voer admin password in:");
+    if(pass === adminPassword){
+        isAdmin = true;
+        document.getElementById("adminControls").style.display = "flex";
+        alert("Admin toegang gegee! Delete knoppies is nou sigbaar.");
+        loadImages(currentFilter, searchBar.value);
+    } else {
+        alert("Verkeerde password!");
+    }
+});
+
+// Lightbox
+const lightboxOverlay = document.getElementById("lightboxOverlay");
+const lightboxImg = document.getElementById("lightboxImg");
+document.getElementById("closeLightbox").addEventListener("click", ()=>lightboxOverlay.style.display="none");
+
+async function handleFiles(file){
+    const uploader = uploaderNameInput.value || "Anonymous";
+    const category = categorySelect.value || "other";
+    const message = memoryMsgInput.value || "";
+    const storageRef = ref(storage,`photos/${uploader}/${file.name}`);
+    const metadata = {customMetadata:{uploader, category, message, likes:"0", featured:"false"}};
+    await uploadBytes(storageRef,file,metadata);
+    showConfetti();
+    loadImages(currentFilter, searchBar.value);
+}
+
+input.addEventListener("change",(e)=>{ const file = e.target.files[0]; if(file) handleFiles(file); });
+
+dropArea.addEventListener("dragover",(e)=>{ e.preventDefault(); dropArea.classList.add("hover"); });
+dropArea.addEventListener("dragleave",(e)=>{ e.preventDefault(); dropArea.classList.remove("hover"); });
+dropArea.addEventListener("drop",(e)=>{ e.preventDefault(); dropArea.classList.remove("hover"); const file=e.dataTransfer.files[0]; if(file) handleFiles(file); });
+
+function showConfetti(){
+    const msg=document.getElementById("confettiMessage");
+    msg.innerText="🎉 Dankie! Jou foto is nou deel van die herinneringe!";
+    setTimeout(()=>{msg.innerText="";},3000);
+}
+
+let currentFilter="all";
+let carouselImages=[];
+let currentSlide=0;
+
+async function loadImages(filterCategory="all", searchName=""){
+    gallery.innerHTML="";
+    carouselImages=[];
+    const listRef = ref(storage,"photos");
+    const res = await listAll(listRef);
+    const allImages = [];
+    const uploaderCount={};
+    const userSections = {};
+
+    for(const folder of res.prefixes){
+        const uploader = folder.name;
+        if(searchName && !uploader.toLowerCase().includes(searchName.toLowerCase())) continue;
+
+        const folderRes = await listAll(folder);
+        for(const item of folderRes.items){
+
+            const metaData = await getMetadata(item);
+            const meta = metaData.customMetadata || {};
+            const category = meta.category || "other";
+            const message = meta.message || "";
+            let likes = parseInt(meta.likes || "0");
+            const featured = meta.featured || "false";
+
+            if(filterCategory!=="all" && filterCategory!==category) continue;
+
+            const imageUrl = await getDownloadURL(item);
+
+            const div=document.createElement("div");
+            div.className="gallery-item";
+
+            const img=document.createElement("img");
+            img.src=imageUrl;
+            img.addEventListener("click",()=>{lightboxImg.src=imageUrl; lightboxOverlay.style.display="flex";});
+
+            const checkbox=document.createElement("input");
+            checkbox.type="checkbox";
+            checkbox.className="photo-checkbox";
+
+            const checkboxContainer=document.createElement("div");
+            checkboxContainer.className="checkbox-container";
+            checkboxContainer.appendChild(checkbox);
+
+            const deleteBtn=document.createElement("button");
+            deleteBtn.className="delete-btn";
+            deleteBtn.innerText="Delete";
+            deleteBtn.style.display = isAdmin ? "inline-block" : "none";
+
+            deleteBtn.onclick=async ()=>{
+                if(confirm("Is jy seker jy wil delete?")){
+                    await deleteObject(item);
+                    loadImages(currentFilter, searchBar.value);
+                }
+            };
+
+            const likeBtn=document.createElement("button");
+            likeBtn.style.border="none";
+            likeBtn.style.background="transparent";
+            likeBtn.style.color="#ff4da6";
+            likeBtn.style.cursor="pointer";
+
+            const likeKey = `liked_${item.fullPath}`;
+
+            if(localStorage.getItem(likeKey)){
+                likeBtn.innerText=`❤️ ${likes} (Liked)`;
+                likeBtn.disabled = true;
+            } else {
+                likeBtn.innerText=`❤️ ${likes}`;
+            }
+
+            likeBtn.onclick=async ()=>{
+                if(localStorage.getItem(likeKey)) return;
+                likes++;
+                await updateMetadata(item,{customMetadata:{...meta, likes:likes.toString()}});
+                localStorage.setItem(likeKey,"true");
+                loadImages(currentFilter, searchBar.value);
+            };
+
+            const infoDiv=document.createElement("div");
+            infoDiv.className="gallery-info";
+            infoDiv.innerHTML=`
+                <span class="name">👤 ${uploader}</span> | 📂 ${category}<br>
+                <span class="message">${message}</span>
+            `;
+
+            div.appendChild(img);
+            div.appendChild(checkboxContainer);
+            div.appendChild(deleteBtn);
+            div.appendChild(likeBtn);
+            div.appendChild(infoDiv);
+
+            if(!userSections[uploader]){
+                const heading = document.createElement("h2");
+                heading.style.marginTop = "30px";
+                heading.style.color = "#ff4da6";
+                heading.innerText = `👤 ${uploader}`;
+                gallery.appendChild(heading);
+
+                const sectionDiv = document.createElement("div");
+                sectionDiv.style.display="grid";
+                sectionDiv.style.gridTemplateColumns="repeat(auto-fit,minmax(120px,1fr))";
+                sectionDiv.style.gap="10px";
+
+                gallery.appendChild(sectionDiv);
+                userSections[uploader] = sectionDiv;
+            }
+
+            userSections[uploader].appendChild(div);
+
+            allImages.push({url:imageUrl, uploader, category, message, likes, featured});
+
+            if(!uploaderCount[uploader]) uploaderCount[uploader]=0;
+            uploaderCount[uploader]++;
+        }
+    }
+
+    const totalPhotos=allImages.length;
+    const totalUsers=Object.keys(uploaderCount).length;
+    let topUploader="None"; let topCount=0;
+    for(const [user,count] of Object.entries(uploaderCount)){
+        if(count>topCount){ topUploader=user; topCount=count; }
+    }
+
+    statsDiv.innerHTML="";
+    statsDiv.innerHTML=`
+       
+                <div class="stat-card">📸 Total Photos<br><strong>${totalPhotos}</strong></div>
+        <div class="stat-card">👤 Total Uploaders<br><strong>${totalUsers}</strong></div>
+        <div class="stat-card">🏆 Top Uploader<br><strong>${topUploader} (${topCount})</strong></div>
+    `;
+
+    // Populate carousel with featured images
+    carouselImages = allImages.filter(img=>img.featured==="true").map(img=>img.url);
+    if(carouselImages.length>0){
+        showCarouselSlide(currentSlide);
+    } else {
+        heroCarousel.innerHTML = '<div class="carousel-caption">Geen featured photos beskikbaar nie ❤️</div>';
+    }
+}
+
+function showCarouselSlide(index){
+    if(carouselImages.length===0) return;
+    currentSlide = (index + carouselImages.length) % carouselImages.length;
+    heroCarousel.innerHTML = `
+        <img src="${carouselImages[currentSlide]}">
+        <div class="carousel-caption">${currentSlide+1} / ${carouselImages.length}</div>
+        <button class="carousel-btn left" id="prevBtn">&#10094;</button>
+        <button class="carousel-btn right" id="nextBtn">&#10095;</button>
+    `;
+    document.getElementById("prevBtn").onclick=()=>showCarouselSlide(currentSlide-1);
+    document.getElementById("nextBtn").onclick=()=>showCarouselSlide(currentSlide+1);
+}
+
+// Search function
+document.getElementById("searchBtn").addEventListener("click", ()=>{
+    const term = searchBar.value.trim();
+    loadImages(currentFilter, term);
+});
+
+// Admin select/deselect/download
+document.getElementById("selectAllBtn").addEventListener("click", ()=>{
+    document.querySelectorAll(".photo-checkbox").forEach(cb=>cb.checked=true);
+});
+document.getElementById("deselectAllBtn").addEventListener("click", ()=>{
+    document.querySelectorAll(".photo-checkbox").forEach(cb=>cb.checked=false);
+});
+document.getElementById("downloadSelectedBtn").addEventListener("click", ()=>{
+    const selected = document.querySelectorAll(".photo-checkbox:checked");
+    if(selected.length===0){ alert("Geen fotos geselekteer nie."); return; }
+    selected.forEach(cb=>{
+        const img = cb.closest(".gallery-item").querySelector("img");
+        const link = document.createElement("a");
+        link.href = img.src;
+        link.download = "photo.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+});
+
+// Messages section
+const messagesList = document.getElementById("messagesList");
+document.getElementById("sendMsgBtn").addEventListener("click", async ()=>{
+    const name = document.getElementById("msgName").value || "Anonymous";
+    const text = document.getElementById("msgText").value;
+    if(!text.trim()){ alert("Voer asseblief 'n boodskap in."); return; }
+    await addDoc(collection(db,"messages"),{name,text,timestamp:Date.now()});
+    document.getElementById("msgText").value="";
+    loadMessages();
+});
+
+async function loadMessages(){
+    messagesList.innerHTML="";
+    const snapshot = await getDocs(collection(db,"messages"));
+    snapshot.forEach(doc=>{
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.style.background="rgba(255,255,255,0.05)";
+        div.style.padding="10px"; div.style.margin="5px 0"; div.style.borderRadius="10px";
+        div.innerHTML = `<strong>${data.name}</strong>: ${data.text}`;
+        messagesList.appendChild(div);
+    });
+}
+
+// Initial load
+loadImages();
+loadMessages();
+
+</script>
+</body>
+</html>
+
