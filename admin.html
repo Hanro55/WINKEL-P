@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
+
+</head>
+
+<body>
+
+<div class="overlay">
+
+<h1>Admin Panel</h1>
+
+<input type="password" id="adminPass" placeholder="Password">
+
+<button onclick="loginAdmin()">Login</button>
+
+<div id="adminContent" style="display:none">
+
+<button onclick="selectAll()">Select All</button>
+<button onclick="deselectAll()">Deselect All</button>
+<button onclick="deleteSelected()">Delete</button>
+
+<div id="adminGallery"></div>
+
+</div>
+
+</div>
+
+</body>
+</html>
