@@ -1,47 +1,45 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Messages</title>
+
+<title>Send Message</title>
+
 <link rel="stylesheet" href="style.css">
-<script src="sidebar.js"></script>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
+
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="toggleSidebar()">☰</div>
+<div class="overlay">
 
-<div id="sidebar" class="sidebar">
+<header>Send a Message</header>
+
+<nav>
 <a href="index.html">Home</a>
-<a href="messages.html">Stuur Boodskap</a>
+<a href="messages.html">Send Message</a>
 <a href="memorial.html">Memorial</a>
-</div>
+</nav>
 
-<header>Stuur 'n Boodskap</header>
 
-<div class="container">
+<div class="panel">
 
-<div class="card">
+<input id="msgName" placeholder="Your name">
 
-<input id="name" placeholder="Naam (opsioneel)">
+<textarea id="message" placeholder="Your message"></textarea>
 
-<textarea id="message" placeholder="Jou boodskap"></textarea>
+<label>
+<input type="checkbox" id="public">
+Public message
+</label>
 
-<select id="type">
-<option value="public">Publiek</option>
-<option value="private">Privaat vir bruidspaar</option>
-</select>
-
-<button onclick="sendMessage()">Stuur Boodskap</button>
-
-<div id="msgSuccess" class="success"></div>
+<button onclick="sendMessage()">Send</button>
 
 </div>
 
 </div>
-
-<script type="module" src="messages.js"></script>
 
 </body>
 </html>
