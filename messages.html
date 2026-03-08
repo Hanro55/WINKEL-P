@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Messages</title>
+<link rel="stylesheet" href="style.css">
+<script src="sidebar.js"></script>
+</head>
+
+<body>
+
+<div class="menu-btn" onclick="toggleSidebar()">☰</div>
+
+<div id="sidebar" class="sidebar">
+<a href="index.html">Home</a>
+<a href="messages.html">Stuur Boodskap</a>
+<a href="memorial.html">Memorial</a>
+</div>
+
+<header>Stuur 'n Boodskap</header>
+
+<div class="container">
+
+<div class="card">
+
+<input id="name" placeholder="Naam (opsioneel)">
+
+<textarea id="message" placeholder="Jou boodskap"></textarea>
+
+<select id="type">
+<option value="public">Publiek</option>
+<option value="private">Privaat vir bruidspaar</option>
+</select>
+
+<button onclick="sendMessage()">Stuur Boodskap</button>
+
+<div id="msgSuccess" class="success"></div>
+
+</div>
+
+</div>
+
+<script type="module" src="messages.js"></script>
+
+</body>
+</html>

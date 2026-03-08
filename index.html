@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Zweers Troue 2027</title>
+<link rel="stylesheet" href="style.css">
+<script src="sidebar.js"></script>
+</head>
+
+<body>
+
+<div class="menu-btn" onclick="toggleSidebar()">☰</div>
+
+<div id="sidebar" class="sidebar">
+<a href="index.html">Home</a>
+<a href="messages.html">Stuur Boodskap</a>
+<a href="memorial.html">Memorial</a>
+</div>
+
+<header>Die Zweers Troue 2027</header>
+
+<div class="container">
+
+<div class="slideshow">
+<img id="slideimg" src="Wedding.jpg">
+</div>
+
+<div class="card">
+
+<h2>Laai jou trou fotos op</h2>
+
+<input id="name" placeholder="Jou naam (opsioneel)">
+
+<input type="file" id="photo">
+
+<button onclick="uploadPhoto()">Upload Foto</button>
+
+<div id="uploadSuccess" class="success"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Foto Gallery</h2>
+
+<div id="gallery" class="gallery"></div>
+
+</div>
+
+</div>
+
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
