@@ -1,32 +1,32 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+
 <title>Memorial</title>
+
 <link rel="stylesheet" href="style.css">
-<script src="sidebar.js"></script>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
+
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="toggleSidebar()">☰</div>
+<div class="overlay">
 
-<div id="sidebar" class="sidebar">
+<header>Wedding Messages</header>
+
+<nav>
 <a href="index.html">Home</a>
-<a href="messages.html">Stuur Boodskap</a>
+<a href="messages.html">Send Message</a>
 <a href="memorial.html">Memorial</a>
-</div>
+</nav>
 
-<header>Memorial Boodskappe</header>
-
-<div class="container">
-
-<div class="card">
-<p>Publieke boodskappe sal hier verskyn.</p>
-</div>
+<div id="messages"></div>
 
 </div>
 
 </body>
+</html>
 </html>
