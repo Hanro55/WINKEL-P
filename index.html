@@ -1,56 +1,60 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+
 <title>Zweers Troue 2027</title>
+
 <link rel="stylesheet" href="style.css">
-<script src="sidebar.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
+
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="toggleSidebar()">☰</div>
+<div class="overlay">
 
-<div id="sidebar" class="sidebar">
+<header>Zweers Troue 2027</header>
+
+<nav>
 <a href="index.html">Home</a>
-<a href="messages.html">Stuur Boodskap</a>
+<a href="messages.html">Send Message</a>
 <a href="memorial.html">Memorial</a>
+</nav>
+
+
+<div class="slideshow" id="slideshow"></div>
+
+
+<div class="panel">
+
+<h2>Upload your photos</h2>
+
+<input type="text" id="name" placeholder="Your name (optional)">
+
+<div id="dropzone" style="border:2px dashed white;padding:30px;text-align:center">
+Drag & Drop photos here
 </div>
 
-<header>Die Zweers Troue 2027</header>
+<input type="file" id="fileInput" multiple>
 
-<div class="container">
+<progress id="progress" value="0" max="100"></progress>
 
-<div class="slideshow">
-<img id="slideimg" src="Wedding.jpg">
-</div>
-
-<div class="card">
-
-<h2>Laai jou trou fotos op</h2>
-
-<input id="name" placeholder="Jou naam (opsioneel)">
-
-<input type="file" id="photo">
-
-<button onclick="uploadPhoto()">Upload Foto</button>
-
-<div id="uploadSuccess" class="success"></div>
-
-</div>
-
-<div class="card">
-
-<h2>Foto Gallery</h2>
-
-<div id="gallery" class="gallery"></div>
+<button onclick="uploadPhotos()">Upload</button>
 
 </div>
 
-</div>
 
-<script type="module" src="script.js"></script>
+<h2>Photo Gallery</h2>
+
+<div id="gallery"></div>
+
+</div>
 
 </body>
 </html>
